@@ -23,6 +23,6 @@ router.post("/", async (req, res) => {
             return;
         }
         // console.log(finalData);
-        res.send(`Your address is ${finalData.results[0].formatted_address}`);
+        res.json({ addressByUser: address, cityByUser: city, postalCodeByUser: postalCode, formattedAddress: finalData.results[0].formatted_address });
     }
 });
