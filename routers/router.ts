@@ -2,7 +2,9 @@ import { Router } from "express";
 import fetch from "node-fetch";
 export const router = Router();
 
-router.post("/", async (req, res) => {
+
+
+router.post("/", async (req, res:any)=> {
   const address = req.body.address;
   const city = req.body.city;
   const postalCode = req.body.postalCode;
@@ -18,7 +20,7 @@ router.post("/", async (req, res) => {
     // parse as needed, e.g. reading directly, or
     // and further:
     // const finalData = await data.json().then((data) => console.log(data));
-    const finalData: any = await data.json();
+    const finalData:any = await data.json();
     if (
       finalData.status === "ZERO_RESULTS" ||
       finalData.results[0].geometry.location_type === "APPROXIMATE" ||
@@ -27,7 +29,8 @@ router.post("/", async (req, res) => {
       res.send("please enter a valid address");
       return;
     }
-    // console.log(finalData);
-    res.json({addressByUser: address, cityByUser: city, postalCodeByUser: postalCode , formattedAddress: finalData.results[0].formatted_address});
+    const result = {addressLine: finalData.results[0].address_components[1].long_name,addressNumber:finalData.results[0].address_components[0].long_name,postalCode:finalData.results[0].address_components[5].long_name,city:finalData.results[0].address_components[2].long_name,region:finalData.results[0].address_components[3].long_name,country: finalData.results[0].address_components[4].long_name}
+    
+    res.json(result);
   }
 });

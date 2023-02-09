@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
             res.send("please enter a valid address");
             return;
         }
-        // console.log(finalData);
-        res.json({ addressByUser: address, cityByUser: city, postalCodeByUser: postalCode, formattedAddress: finalData.results[0].formatted_address });
+        const result = { addressLine: finalData.results[0].address_components[1].long_name, addressNumber: finalData.results[0].address_components[0].long_name, postalCode: finalData.results[0].address_components[5].long_name, city: finalData.results[0].address_components[2].long_name, region: finalData.results[0].address_components[3].long_name, country: finalData.results[0].address_components[4].long_name };
+        res.json(result);
     }
 });
