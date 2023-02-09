@@ -29,8 +29,39 @@ router.post("/", async (req, res:any)=> {
       res.send("please enter a valid address");
       return;
     }
-    const result = {addressLine: finalData.results[0].address_components[1].long_name,addressNumber:finalData.results[0].address_components[0].long_name,postalCode:finalData.results[0].address_components[5].long_name,city:finalData.results[0].address_components[2].long_name,region:finalData.results[0].address_components[3].long_name,country: finalData.results[0].address_components[4].long_name}
-    
-    res.json(result);
-  }
+    // const findAddress = finalData.results[0].address_components.types.find((data: { types: string; }) => {data.types = 'route', data.types = 'locality',data.types = 'street_number',data.types = 'country',data.types = 'postal_code'} )
+    // const findCity = finalData.results[0].address_components.find((data: { types: string; }) => data.types = 'locality' )
+    // const findNumber = finalData.results[0].address_components.find((data: { types: string; }) => data.types = 'street_number' )
+    // const findCountry = finalData.results[0].address_components.find((data: { types: string; }) => data.types = 'country' )
+    // const findPostalCode = finalData.results[0].address_components.find((data: { types: string; }) => data.types = 'postal_code' )
+
+        // const result = {addressLine: findAddress.long_name,addressNumber:findNumber.long_name,postalCode:findPostalCode.long_name,city:findCity.long_name,country: findCountry.long_name}
+
+        let Arr1 = Array()
+        let Arr2 = Array()
+const testJson = finalData.results[0].address_components.filter((d: { long_name: any; }) => Arr1.push(d.long_name))
+const testJson2 = finalData.results[0].address_components.filter((d: { types: any; }) => Arr2.push(d.types))
+
+// let newArr2:any[] = [].concat(...Arr2)
+const obj:any = {};
+Arr2.forEach((element, index) => {
+  obj[element] = Arr1[index];
 });
+obj['addressNumber'] = obj['street_number']
+obj['country'] = obj['country,political']
+obj['address'] = obj['route']
+obj['postalCode'] = obj['postal_code']
+obj['city'] = obj['locality,political']
+obj['region'] = obj['administrative_area_level_3,political']
+obj['region2'] = obj['administrative_area_level_1,political']
+obj['province'] = obj['administrative_area_level_2,political']
+delete obj['street_number']
+delete obj['country,political']
+delete obj['route']
+delete obj['postal_code']
+delete obj['locality,political']
+delete obj['administrative_area_level_3,political']
+delete obj['administrative_area_level_1,political']
+delete obj['administrative_area_level_2,political']
+res.json(obj)
+}});
