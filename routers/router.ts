@@ -45,13 +45,11 @@ obj['city'] = obj['locality,political']
 obj['region'] = obj['administrative_area_level_3,political']
 obj['region2'] = obj['administrative_area_level_1,political']
 obj['province'] = obj['administrative_area_level_2,political']
-delete obj['street_number']
-delete obj['country,political']
-delete obj['route']
-delete obj['postal_code']
-delete obj['locality,political']
-delete obj['administrative_area_level_3,political']
-delete obj['administrative_area_level_1,political']
-delete obj['administrative_area_level_2,political']
-res.json(obj)
+
+const {addressNumber,country,address,postalCode,city,region,region2,province} = obj
+const newObj = {
+  addressNumber,country,address,postalCode,city,region,region2,province
+}
+res.json(newObj)
+console.log(newObj)
 }});
