@@ -40,6 +40,5 @@ router.post("/", async (req, res) => {
             addressNumber, country, address, postalCode, city, region, region2, province
         };
         res.json(newObj);
-        console.log(newObj);
     }
 });
