@@ -1,10 +1,8 @@
 import { addressValidate } from '../services/address-validation';
 
 export async function addressController(req: any, res: any) {
-  //
-  const address = req.body.address;
-  const city = req.body.city;
-  const postalCode = req.body.postalCode;
+  const { address, city, postalCode } = req.body;
+
   try {
     const validationObject = await addressValidate(address, city, postalCode);
     return res.json(validationObject);
