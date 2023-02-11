@@ -10,7 +10,7 @@ export async function addressCallback(req: any, res: any) {
 
   const { data } = axiosResponse;
 
-  if (data.status !== 200) {
+  if (axiosResponse.status !== 200) {
     /* Handle */
     throw new Error("Something went wrong, try again.");
   }
