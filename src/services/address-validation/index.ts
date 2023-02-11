@@ -1,13 +1,16 @@
-import fetch from "node-fetch";
+import axios from 'axios';
 
 export async function addressCallback(req: any, res: any) {
   const address = req.body.address;
   const city = req.body.city;
   const postalCode = req.body.postalCode;
-  const data = await fetch(
+  const axiosResponse = await axios(
     `https://maps.googleapis.com/maps/api/geocode/json?address=${address}+${city}+${postalCode}&key=${process.env.GOOGLE_API}`
   );
-  if (!data.ok) {
+
+  const { data } = axiosResponse;
+
+  if (data.status !== 200) {
     /* Handle */
     throw new Error("Something went wrong, try again.");
   }
@@ -51,6 +54,5 @@ export async function addressCallback(req: any, res: any) {
       countryISO: countryISOArray[index].short_name,
     };
     res.json(newObj);
-    // res.json(newObj)
   }
 }

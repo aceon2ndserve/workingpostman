@@ -10,4 +10,4 @@ To start locally simply type:
 
 npm run start:prod
 
-DONE //
+DONE -
