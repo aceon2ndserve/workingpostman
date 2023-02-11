@@ -19,35 +19,30 @@ export async function addressValidate(address: string, city: string, postalCode:
     throw new Error('Please enter a valid address');
   }
 
-  let Arr1 = Array();
-  let Arr2 = Array();
+  const addressComponents: {
+    long_name: string;
+    short_name: string;
+    types: string[];
+  }[] = data.results?.[0]?.address_components;
 
-  data.results[0].address_components.filter((d: { long_name: any }) => Arr1.push(d.long_name));
-  data.results[0].address_components.filter((d: { types: any }) => Arr2.push(d.types));
+  if (!addressComponents) {
+    throw new Error('Address components seem to be empty');
+  }
 
-  const obj: any = {};
+  const addressComponentMap: any = addressComponents.reduce((prevValue, currentValue) => {
+    const newValue = { ...prevValue, [`${currentValue.types[0]}`]: currentValue.short_name };
+    return newValue;
+  }, {});
 
-  Arr2.forEach((element, index) => {
-    obj[element] = Arr1[index];
-  });
-
-  let countryISOArray = data.results[0].address_components;
-
-  const index = countryISOArray.findIndex((object: { types: string }) => {
-    return object.types[0] === 'country';
-  });
-
-  const newObj = {
-    addressNumber: obj['street_number'],
-    country: obj['country,political'],
-    address: obj['route'],
-    postalCode: obj['postal_code'],
-    city: obj['locality,political'],
-    region: obj['administrative_area_level_3,political'],
-    region2: obj['administrative_area_level_1,political'],
-    province: obj['administrative_area_level_2,political'],
-    countryISO: countryISOArray[index].short_name,
+  return {
+    raw: addressComponents,
+    formatted_raw: addressComponentMap,
+    formatted: {
+      street_number: addressComponentMap.street_number,
+      street: addressComponentMap.route,
+      city: addressComponentMap.locality,
+      postal_code: addressComponentMap.postal_code,
+      country_code: addressComponentMap.country,
+    },
   };
-
-  return newObj;
 }
