@@ -1,12 +1,8 @@
 import axios from 'axios';
 
-export async function addressController(req: any, res: any) {
-  const address = req.body.address;
-  const city = req.body.city;
-  const postalCode = req.body.postalCode;
-
+export async function addressValidate(address: string, city: string, postalCode: string) {
   const axiosResponse = await axios(
-    `https://maps.googleapis.com/maps/api/geo ode/json?address=${address}+${city}+${postalCode}&key=${process.env.GOOGLE_API}`,
+    `https://maps.googleapis.com/maps/api/geocode/json?address=${address}+${city}+${postalCode}&key=${process.env.GOOGLE_API}`,
   );
 
   const { data } = axiosResponse;
@@ -20,9 +16,7 @@ export async function addressController(req: any, res: any) {
     data.results[0].geometry.location_type === 'APPROXIMATE' ||
     data.results[0].address_components[0].types[0] !== 'street_number'
   ) {
-    return res.json({
-      error: 'please enter a valid address',
-    });
+    throw new Error('Please enter a valid address');
   }
 
   let Arr1 = Array();
@@ -55,5 +49,5 @@ export async function addressController(req: any, res: any) {
     countryISO: countryISOArray[index].short_name,
   };
 
-  return res.json(newObj);
+  return newObj;
 }
